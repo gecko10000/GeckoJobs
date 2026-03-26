@@ -1,0 +1,16 @@
+@file:UseSerializers(MMComponentSerializer::class)
+
+package gecko10000.geckojobs.config.model
+
+import gecko10000.geckolib.config.serializers.MMComponentSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+import net.kyori.adventure.text.Component
+
+@Serializable
+data class Job(
+    val id: String,
+    val name: Component,
+    val description: List<Component>,
+    val actions: Map<ActionCategory, List<ActionEntry>>,
+)
