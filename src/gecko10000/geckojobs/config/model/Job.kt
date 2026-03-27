@@ -12,5 +12,5 @@ data class Job(
     val id: String,
     val name: Component,
     val description: List<Component>,
-    val actions: Map<ActionCategory, List<ActionEntry>>,
+    val actions: Map<ActionCategory, Map<String, Double>>,
 )

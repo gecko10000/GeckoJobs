@@ -1,7 +1,6 @@
 package gecko10000.geckojobs
 
 import gecko10000.geckojobs.config.model.ActionCategory
-import gecko10000.geckojobs.config.model.ActionEntry
 import gecko10000.geckojobs.config.model.Job
 import gecko10000.geckojobs.di.MyKoinComponent
 import gecko10000.geckolib.config.YamlFileManager
@@ -16,6 +15,11 @@ class JobConfigManager : MyKoinComponent {
     private val jobsList = mutableListOf<YamlFileManager<Job>>()
     val jobs: List<Job>
         get() = jobsList.map { it.value }
+
+    private val actionToJobMap = mutableMapOf<ActionCategory, Map<String, List<Job>>>()
+
+    fun findJobsFor(category: ActionCategory, actionId: String) =
+        actionToJobMap[category]?.get(actionId) ?: emptyList()
 
     init {
         saveDefaultJobConfigs()
@@ -35,6 +39,25 @@ class JobConfigManager : MyKoinComponent {
         }
     }
 
+    private fun recomputeActionToJobMap() {
+        actionToJobMap.clear()
+        for (job in jobs) {
+            for (category in job.actions) {
+                for (entry in category.value) {
+                    actionToJobMap.compute(category.key) { _, existingMapping ->
+                        val newMap = existingMapping?.toMutableMap() ?: mutableMapOf()
+                        newMap.compute(entry.key) { _, jobs ->
+                            val newList = jobs?.toMutableList() ?: mutableListOf()
+                            newList.add(job)
+                            return@compute newList
+                        }
+                        return@compute newMap
+                    }
+                }
+            }
+        }
+    }
+
     fun reloadJobConfigs() {
         jobsList.clear()
         val jobFiles = jobsDirectory.listFiles { it.extension == "yml" }
@@ -45,6 +68,7 @@ class JobConfigManager : MyKoinComponent {
                 serializer = Job.serializer(),
             )
         }
+        recomputeActionToJobMap()
     }
 
     companion object {
@@ -58,54 +82,54 @@ class JobConfigManager : MyKoinComponent {
                     parseMM("<yellow>Xray: off"),
                 ),
                 actions = mapOf(
-                    ActionCategory.MINE to listOf(
-                        ActionEntry("stone", 0.1),
-                        ActionEntry("andesite", 0.1),
-                        ActionEntry("diorite", 0.1),
-                        ActionEntry("granite", 0.1),
-                        ActionEntry("tuff", 0.1),
-                        ActionEntry("calcite", 0.4),
-                        ActionEntry("amethyst_block", 0.5),
-                        ActionEntry("sandstone", 0.1),
-                        ActionEntry("chiseled_sandstone", 0.1),
-                        ActionEntry("cut_sandstone", 0.1),
-                        ActionEntry("deepslate", 0.15),
-                        ActionEntry("coal_ore", 0.2),
-                        ActionEntry("deepslate_coal_ore", 0.2),
-                        ActionEntry("redstone_ore", 0.2),
-                        ActionEntry("deepslate_redstone_ore", 0.2),
-                        ActionEntry("iron_ore", 0.3),
-                        ActionEntry("deepslate_iron_ore", 0.3),
-                        ActionEntry("copper_ore", 0.4),
-                        ActionEntry("deepslate_copper_ore", 0.4),
-                        ActionEntry("gold_ore", 0.8),
-                        ActionEntry("deepslate_gold_ore", 0.8),
-                        ActionEntry("lapis_ore", 0.6),
-                        ActionEntry("deepslate_lapis_ore", 0.6),
-                        ActionEntry("diamond_ore", 1.1),
-                        ActionEntry("deepslate_diamond_ore", 1.1),
-                        ActionEntry("emerald_ore", 3.0),
-                        ActionEntry("deepslate_emerald_ore", 3.0),
-                        ActionEntry("obsidian", 1.0),
-                        ActionEntry("cobblestone_wall", 0.2),
-                        ActionEntry("mossy_cobblestone_wall", 0.2),
-                        ActionEntry("terracotta", 0.2),
-                        ActionEntry("red_terracotta", 0.2),
-                        ActionEntry("orange_terracotta", 0.2),
-                        ActionEntry("yellow_terracotta", 0.2),
-                        ActionEntry("brown_terracotta", 0.2),
-                        ActionEntry("white_terracotta", 0.2),
-                        ActionEntry("light_gray_terracotta", 0.2),
+                    ActionCategory.MINE to mapOf(
+                        "stone" to 0.1,
+                        "andesite" to 0.1,
+                        "diorite" to 0.1,
+                        "granite" to 0.1,
+                        "tuff" to 0.1,
+                        "calcite" to 0.4,
+                        "amethyst_block" to 0.5,
+                        "sandstone" to 0.1,
+                        "chiseled_sandstone" to 0.1,
+                        "cut_sandstone" to 0.1,
+                        "deepslate" to 0.15,
+                        "coal_ore" to 0.2,
+                        "deepslate_coal_ore" to 0.2,
+                        "redstone_ore" to 0.2,
+                        "deepslate_redstone_ore" to 0.2,
+                        "iron_ore" to 0.3,
+                        "deepslate_iron_ore" to 0.3,
+                        "copper_ore" to 0.4,
+                        "deepslate_copper_ore" to 0.4,
+                        "gold_ore" to 0.8,
+                        "deepslate_gold_ore" to 0.8,
+                        "lapis_ore" to 0.6,
+                        "deepslate_lapis_ore" to 0.6,
+                        "diamond_ore" to 1.1,
+                        "deepslate_diamond_ore" to 1.1,
+                        "emerald_ore" to 3.0,
+                        "deepslate_emerald_ore" to 3.0,
+                        "obsidian" to 1.0,
+                        "cobblestone_wall" to 0.2,
+                        "mossy_cobblestone_wall" to 0.2,
+                        "terracotta" to 0.2,
+                        "red_terracotta" to 0.2,
+                        "orange_terracotta" to 0.2,
+                        "yellow_terracotta" to 0.2,
+                        "brown_terracotta" to 0.2,
+                        "white_terracotta" to 0.2,
+                        "light_gray_terracotta" to 0.2,
 
-                        ActionEntry("nether_quartz_ore", 0.3),
-                        ActionEntry("nether_gold_ore", 0.3),
-                        ActionEntry("nether_bricks", 0.2),
-                        ActionEntry("nether_brick_stairs", 0.2),
-                        ActionEntry("nether_brick_fence", 0.2),
-                        ActionEntry("netherrack", 0.05),
-                        ActionEntry("basalt", 0.1),
+                        "nether_quartz_ore" to 0.3,
+                        "nether_gold_ore" to 0.3,
+                        "nether_bricks" to 0.2,
+                        "nether_brick_stairs" to 0.2,
+                        "nether_brick_fence" to 0.2,
+                        "netherrack" to 0.05,
+                        "basalt" to 0.1,
 
-                        ActionEntry("end_stone", 0.4),
+                        "end_stone" to 0.4,
                     )
                 )
             ),
@@ -117,79 +141,79 @@ class JobConfigManager : MyKoinComponent {
                     parseMM("<yellow>Roundhouse kick mobs into the nether."),
                 ),
                 actions = mapOf(
-                    ActionCategory.KILL to listOf(
-                        ActionEntry("bat", 3.0),
-                        ActionEntry("blaze", 0.8),
-                        ActionEntry("bogged", 1.0),
-                        ActionEntry("breeze", 0.4),
-                        ActionEntry("cave_spider", 0.2),
-                        ActionEntry("chicken", 0.4),
-                        ActionEntry("cod", 0.4),
-                        ActionEntry("cow", 0.4),
-                        ActionEntry("creaking", 0.7),
-                        ActionEntry("creeper", 0.5),
-                        ActionEntry("dolphin", 0.3),
-                        ActionEntry("drowned", 0.6),
-                        ActionEntry("elder_guardian", 25.0),
-                        ActionEntry("ender_dragon", 10.0),
-                        ActionEntry("enderman", 0.04),
-                        ActionEntry("endermite", 0.6),
-                        ActionEntry("evoker", 2.5),
-                        ActionEntry("ghast", 0.7),
-                        ActionEntry("glow_squid", 0.5),
-                        ActionEntry("goat", 0.4),
-                        ActionEntry("guardian", 0.2),
-                        ActionEntry("hoglin", 0.2),
-                        ActionEntry("husk", 0.5),
-                        ActionEntry("iron_golem", 0.8),
-                        ActionEntry("magma_cube", 0.06),
-                        ActionEntry("mooshroom", 0.5),
-                        ActionEntry("nautilus", 0.6),
-                        ActionEntry("parched", 0.5),
-                        ActionEntry("phantom", 0.8),
-                        ActionEntry("pig", 0.3),
-                        ActionEntry("piglin", 0.8),
-                        ActionEntry("piglin_brute", 2.0),
-                        ActionEntry("pillager", 0.3),
-                        ActionEntry("polar_bear", 0.6),
-                        ActionEntry("pufferfish", 0.4),
-                        ActionEntry("rabbit", 0.3),
-                        ActionEntry("ravager", 0.9),
-                        ActionEntry("salmon", 0.4),
-                        ActionEntry("sheep", 0.3),
-                        ActionEntry("shulker", 0.8),
-                        ActionEntry("silverfish", 0.3),
-                        ActionEntry("skeleton", 0.4),
-                        ActionEntry("skeleton_horse", 1.0),
-                        ActionEntry("slime", 0.06),
-                        ActionEntry("spider", 0.4),
-                        ActionEntry("squid", 0.4),
-                        ActionEntry("stray", 0.5),
-                        ActionEntry("tropical_fish", 0.4),
-                        ActionEntry("vex", 1.2),
-                        ActionEntry("vindicator", 0.8),
-                        ActionEntry("warden", 3.6),
-                        ActionEntry("witch", 0.5),
-                        ActionEntry("wither", 15.0),
-                        ActionEntry("wither_skeleton", 0.6),
-                        ActionEntry("zoglin", 0.4),
-                        ActionEntry("zombie", 0.3),
-                        ActionEntry("zombie_horse", 1.0),
-                        ActionEntry("zombie_villager", 0.3),
-                        ActionEntry("zombified_piglin", 0.3),
+                    ActionCategory.KILL to mapOf(
+                        "bat" to 3.0,
+                        "blaze" to 0.8,
+                        "bogged" to 1.0,
+                        "breeze" to 0.4,
+                        "cave_spider" to 0.2,
+                        "chicken" to 0.4,
+                        "cod" to 0.4,
+                        "cow" to 0.4,
+                        "creaking" to 0.7,
+                        "creeper" to 0.5,
+                        "dolphin" to 0.3,
+                        "drowned" to 0.6,
+                        "elder_guardian" to 25.0,
+                        "ender_dragon" to 10.0,
+                        "enderman" to 0.04,
+                        "endermite" to 0.6,
+                        "evoker" to 2.5,
+                        "ghast" to 0.7,
+                        "glow_squid" to 0.5,
+                        "goat" to 0.4,
+                        "guardian" to 0.2,
+                        "hoglin" to 0.2,
+                        "husk" to 0.5,
+                        "iron_golem" to 0.8,
+                        "magma_cube" to 0.06,
+                        "mooshroom" to 0.5,
+                        "nautilus" to 0.6,
+                        "parched" to 0.5,
+                        "phantom" to 0.8,
+                        "pig" to 0.3,
+                        "piglin" to 0.8,
+                        "piglin_brute" to 2.0,
+                        "pillager" to 0.3,
+                        "polar_bear" to 0.6,
+                        "pufferfish" to 0.4,
+                        "rabbit" to 0.3,
+                        "ravager" to 0.9,
+                        "salmon" to 0.4,
+                        "sheep" to 0.3,
+                        "shulker" to 0.8,
+                        "silverfish" to 0.3,
+                        "skeleton" to 0.4,
+                        "skeleton_horse" to 1.0,
+                        "slime" to 0.06,
+                        "spider" to 0.4,
+                        "squid" to 0.4,
+                        "stray" to 0.5,
+                        "tropical_fish" to 0.4,
+                        "vex" to 1.2,
+                        "vindicator" to 0.8,
+                        "warden" to 3.6,
+                        "witch" to 0.5,
+                        "wither" to 15.0,
+                        "wither_skeleton" to 0.6,
+                        "zoglin" to 0.4,
+                        "zombie" to 0.3,
+                        "zombie_horse" to 1.0,
+                        "zombie_villager" to 0.3,
+                        "zombified_piglin" to 0.3,
                     ),
-                    ActionCategory.TAME to listOf(
-                        ActionEntry("wolf", 5.0),
-                        ActionEntry("ocelot", 5.0),
-                        ActionEntry("horse", 3.0),
-                        ActionEntry("skeleton_horse", 5.0),
-                        ActionEntry("zombie_horse", 4.0),
-                        ActionEntry("donkey", 4.0),
-                        ActionEntry("llama", 4.0),
-                        ActionEntry("mule", 4.0),
-                        ActionEntry("parrot", 4.0),
-                        ActionEntry("nautilus", 4.0),
-                        ActionEntry("zombie_nautilus", 4.0),
+                    ActionCategory.TAME to mapOf(
+                        "wolf" to 5.0,
+                        "ocelot" to 5.0,
+                        "horse" to 3.0,
+                        "skeleton_horse" to 5.0,
+                        "zombie_horse" to 4.0,
+                        "donkey" to 4.0,
+                        "llama" to 4.0,
+                        "mule" to 4.0,
+                        "parrot" to 4.0,
+                        "nautilus" to 4.0,
+                        "zombie_nautilus" to 4.0,
                     )
                 )
             )

@@ -36,6 +36,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://eldonexus.de/repository/maven-public/")
     maven("https://repo.helpch.at/releases/")
+    maven("https://redempt.dev")
 }
 
 dependencies {
@@ -45,6 +46,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.12.2")
     compileOnly("net.strokkur.commands:annotations-paper:2.0.2")
     kapt("net.strokkur.commands:processor-paper:2.0.2")
+    implementation("com.github.Redempt:Crunch:2.0.3")
 }
 
 kotlin {

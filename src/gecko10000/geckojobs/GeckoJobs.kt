@@ -16,6 +16,8 @@ class GeckoJobs : JavaPlugin(), MyKoinComponent {
         initialValue = Config(),
         serializer = Config.serializer()
     )
+    val config: Config
+        get() = configFile.value
 
     override fun onEnable() {
         MyKoinContext.init(this)
