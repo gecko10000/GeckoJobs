@@ -16,15 +16,21 @@ class ActionProgressManager : MyKoinComponent {
     private val jobConfigManager: JobConfigManager by inject()
     private val jobProgressStorage: JobProgressStorage by inject()
 
-    fun addProgress(player: Player, actionCategory: ActionCategory, identifier: String) {
+    fun addProgress(player: Player, actionCategory: ActionCategory, identifier: String, givenMult: Double = 1.0) {
         val jobsToProgress = jobConfigManager.findJobsFor(actionCategory, identifier)
-        jobsToProgress.forEach { addProgressToJob(player, it, actionCategory, identifier) }
+        jobsToProgress.forEach { addProgressToJob(player, it, actionCategory, identifier, givenMult) }
     }
 
-    private fun addProgressToJob(player: Player, job: Job, actionCategory: ActionCategory, identifier: String) {
+    private fun addProgressToJob(
+        player: Player,
+        job: Job,
+        actionCategory: ActionCategory,
+        identifier: String,
+        givenMult: Double
+    ) {
         val baseExperience = job.actions[actionCategory]?.get(identifier) ?: return
         val permissionMultiplier = 1 + getPermissionBoost(player, job)
-        val finalExperience = baseExperience * permissionMultiplier
+        val finalExperience = baseExperience * permissionMultiplier * givenMult
         jobProgressStorage.addExperience(player, job, finalExperience)
     }
 

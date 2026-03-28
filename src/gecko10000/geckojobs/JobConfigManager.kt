@@ -219,6 +219,89 @@ class JobConfigManager : MyKoinComponent {
                         "zombie_nautilus" to 4.0,
                     )
                 )
+            ),
+            Job(
+                id = "fisherman",
+                name = parseMM("<#00b3a8><b>Fisherman"),
+                description = listOf(
+                    parseMM("<yellow>Don't mind the smell."),
+                    parseMM("<yellow>No scam here."),
+                ),
+                bossBarColor = BossBar.Color.BLUE,
+                actions = mapOf(
+                    ActionCategory.FISH to mapOf(
+                        "cod" to 0.5,
+                        "salmon" to 0.8,
+                        "pufferfish" to 1.4,
+                        "tropical_fish" to 3.0,
+                        "enchanted_book" to 10.0,
+                        "bow" to 5.0,
+                        "fishing_rod" to 5.0,
+                        "name_tag" to 5.0,
+                        "nautilus_shell" to 3.0,
+                        "saddle" to 5.0,
+                        "lily_pad" to 4.0,
+                        "bone" to 1.0,
+                        "bowl" to 1.0,
+                        "leather" to 1.0,
+                        "leather_boots" to 1.0,
+                        "rotten_flesh" to 1.0,
+                        "potion" to 1.0,
+                        "tripwire_hook" to 1.0,
+                        "stick" to 1.0,
+                        "string" to 1.0,
+                        "ink_sac" to 1.0,
+                        "bamboo" to 4.0,
+                    )
+                )
+            ),
+            Job(
+                id = "enchanter",
+                name = parseMM("<#9966cc><b>Enchanter"),
+                description = listOf(
+                    parseMM("<yellow>You're a hairy wizard."),
+                ),
+                bossBarColor = BossBar.Color.PURPLE,
+                actions = mapOf(
+                    ActionCategory.ENCHANT to mapOf(
+                        "minecraft:aqua_affinity" to 2.0,
+                        "minecraft:bane_of_arthropods" to 0.6,
+                        "minecraft:blast_protection" to 0.8,
+                        "minecraft:breach" to 0.8,
+                        "minecraft:channeling" to 2.4,
+                        "minecraft:density" to 0.7,
+                        "minecraft:depth_strider" to 1.0,
+                        "minecraft:efficiency" to 1.0,
+                        "minecraft:feather_falling" to 0.8,
+                        "minecraft:fire_aspect" to 1.2,
+                        "minecraft:fire_protection" to 0.9,
+                        "minecraft:flame" to 2.0,
+                        "minecraft:fortune" to 1.5,
+                        "minecraft:impaling" to 0.5,
+                        "minecraft:infinity" to 4.0,
+                        "minecraft:knockback" to 1.5,
+                        "minecraft:looting" to 1.5,
+                        "minecraft:loyalty" to 0.7,
+                        "minecraft:luck_of_the_sea" to 0.9,
+                        "minecraft:lunge" to 0.8,
+                        "minecraft:lure" to 0.9,
+                        "minecraft:multishot" to 3.0,
+                        "minecraft:piercing" to 0.6,
+                        "minecraft:power" to 0.5,
+                        "minecraft:projectile_protection" to 0.6,
+                        "minecraft:protection" to 0.7,
+                        "minecraft:punch" to 1.4,
+                        "minecraft:quick_charge" to 0.9,
+                        "minecraft:respiration" to 1.1,
+                        "minecraft:riptide" to 0.9,
+                        "minecraft:sharpness" to 0.8,
+                        "minecraft:silk_touch" to 3.0,
+                        "minecraft:smite" to 0.5,
+                        "minecraft:sweeping_edge" to 1.4,
+                        "minecraft:thorns" to 0.9,
+                        "minecraft:unbreaking" to 1.5,
+                    )
+                )
             )
         )
     }
