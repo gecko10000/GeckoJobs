@@ -5,6 +5,7 @@ package gecko10000.geckojobs.config.model
 import gecko10000.geckolib.config.serializers.MMComponentSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 
 @Serializable
@@ -12,5 +13,6 @@ data class Job(
     val id: String,
     val name: Component,
     val description: List<Component>,
+    val bossBarColor: BossBar.Color,
     val actions: Map<ActionCategory, Map<String, Double>>,
 )

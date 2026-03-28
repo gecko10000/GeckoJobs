@@ -10,6 +10,7 @@ import org.koin.core.component.inject
 class JobProgressStorage : MyKoinComponent {
 
     private val plugin: GeckoJobs by inject()
+    private val jobProgressDisplay: JobProgressDisplay by inject()
 
     private fun jobLevelKey(job: Job) = NamespacedKey(plugin, "level_${job.id}")
     private fun jobExpKey(job: Job) = NamespacedKey(plugin, "exp_${job.id}")
@@ -19,6 +20,7 @@ class JobProgressStorage : MyKoinComponent {
         val rawNewProgress = currentProgress.copy(exp = currentProgress.exp + exp)
         val newProgress = normalize(rawNewProgress)
         setProgress(player, job, newProgress)
+        jobProgressDisplay.showProgress(player, job)
     }
 
     // Gets progress to within [0, expForLevel(level+1))

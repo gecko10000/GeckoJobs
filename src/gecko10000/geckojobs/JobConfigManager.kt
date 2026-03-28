@@ -5,6 +5,7 @@ import gecko10000.geckojobs.config.model.Job
 import gecko10000.geckojobs.di.MyKoinComponent
 import gecko10000.geckolib.config.YamlFileManager
 import gecko10000.geckolib.extensions.parseMM
+import net.kyori.adventure.bossbar.BossBar
 import org.koin.core.component.inject
 
 class JobConfigManager : MyKoinComponent {
@@ -75,12 +76,13 @@ class JobConfigManager : MyKoinComponent {
         private val DEFAULT_JOBS = listOf(
             Job(
                 id = "miner",
-                name = parseMM("<light_gray><b>Miner"),
+                name = parseMM("<gray><b>Miner"),
                 description = listOf(
                     parseMM("<yellow>Ores: mined"),
                     parseMM("<yellow>Caves: found"),
                     parseMM("<yellow>Xray: off"),
                 ),
+                bossBarColor = BossBar.Color.WHITE,
                 actions = mapOf(
                     ActionCategory.MINE to mapOf(
                         "stone" to 0.1,
@@ -140,6 +142,7 @@ class JobConfigManager : MyKoinComponent {
                     parseMM("<yellow>Kill mobs. Behead mobs."),
                     parseMM("<yellow>Roundhouse kick mobs into the nether."),
                 ),
+                bossBarColor = BossBar.Color.RED,
                 actions = mapOf(
                     ActionCategory.KILL to mapOf(
                         "bat" to 3.0,

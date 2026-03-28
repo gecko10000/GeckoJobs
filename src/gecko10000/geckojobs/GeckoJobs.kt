@@ -1,5 +1,6 @@
 package gecko10000.geckojobs
 
+import gecko10000.geckojobs.command.CommandHandler
 import gecko10000.geckojobs.config.Config
 import gecko10000.geckojobs.di.MyKoinComponent
 import gecko10000.geckojobs.di.MyKoinContext
@@ -22,6 +23,7 @@ class GeckoJobs : JavaPlugin(), MyKoinComponent {
     override fun onEnable() {
         MyKoinContext.init(this)
         CommandHandler().register()
+        Listeners()
     }
 
     fun reloadConfigs() {
