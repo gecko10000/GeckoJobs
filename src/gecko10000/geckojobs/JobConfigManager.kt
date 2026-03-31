@@ -1,6 +1,7 @@
 package gecko10000.geckojobs
 
 import gecko10000.geckojobs.config.model.ActionCategory
+import gecko10000.geckojobs.config.model.Harvestable
 import gecko10000.geckojobs.config.model.Job
 import gecko10000.geckojobs.di.MyKoinComponent
 import gecko10000.geckolib.config.YamlFileManager
@@ -23,7 +24,6 @@ class JobConfigManager : MyKoinComponent {
         actionToJobMap[category]?.get(actionId) ?: emptyList()
 
     init {
-        saveDefaultJobConfigs()
         reloadJobConfigs()
     }
 
@@ -61,6 +61,7 @@ class JobConfigManager : MyKoinComponent {
 
     fun reloadJobConfigs() {
         jobsList.clear()
+        saveDefaultJobConfigs()
         val jobFiles = jobsDirectory.listFiles { it.extension == "yml" }
         for (jobFile in jobFiles) {
             jobsList += YamlFileManager(
@@ -302,7 +303,77 @@ class JobConfigManager : MyKoinComponent {
                         "minecraft:unbreaking" to 1.5,
                     )
                 )
-            )
+            ),
+            Job(
+                id = "farmer",
+                name = parseMM("<#e6a500><b>Farmer"),
+                description = listOf(
+                    parseMM("<yellow>Working at the farmacy."),
+                ),
+                bossBarColor = BossBar.Color.YELLOW,
+                actions = mapOf(
+                    ActionCategory.HARVEST to mapOf(
+                        Harvestable.WHEAT to 0.9,
+                        Harvestable.POTATOES to 0.9,
+                        Harvestable.CARROTS to 0.9,
+                        Harvestable.BEETROOTS to 0.9,
+                        Harvestable.CACTUS to 1.7,
+                        Harvestable.SUGAR_CANE to 0.5,
+                        Harvestable.PUMPKIN to 1.5,
+                        Harvestable.MELON to 1.5,
+                        Harvestable.CHORUS_FRUIT to 0.8,
+                        Harvestable.CHORUS_FLOWER to 5.0,
+                        Harvestable.BAMBOO to 0.3,
+                        Harvestable.KELP to 0.3,
+                        Harvestable.COCOA to 1.8,
+                        Harvestable.GLOW_LICHEN to 2.0,
+                        Harvestable.GLOW_BERRIES to 3.0,
+                        Harvestable.MOSS to 1.6,
+                        Harvestable.NETHER_WART to 1.2,
+                        Harvestable.SEAGRASS to 0.9,
+                        Harvestable.SEA_PICKLE to 3.0,
+                        Harvestable.SWEET_BERRIES to 2.0,
+                        Harvestable.VINES to 4.0,
+                    )
+                )
+            ),
+            Job(
+                id = "lumberjack",
+                name = parseMM("<#996f3d><b>Lumberjack"),
+                description = listOf(
+                    parseMM("<yellow>Got wood?"),
+                    parseMM("<yellow>I know I do..."),
+                ),
+                bossBarColor = BossBar.Color.GREEN,
+                actions = mapOf(
+                    ActionCategory.MINE to mapOf(
+                        "oak_log" to 0.5,
+                    )
+                )
+            ),
+            Job(
+                id = "digger",
+                name = parseMM("<#ffc400><b>Digger"),
+                description = listOf(
+                    parseMM("<yellow>With a <u>D</u>. No N's."),
+                ),
+                bossBarColor = BossBar.Color.YELLOW,
+                actions = mapOf(
+                    ActionCategory.MINE to mapOf()
+                )
+            ),
+            Job(
+                id = "brewer",
+                name = parseMM("<#cc5252><b>Brewer"),
+                description = listOf(
+                    parseMM("<yellow>Don't get high on"),
+                    parseMM("<yellow>your own supply."),
+                ),
+                bossBarColor = BossBar.Color.PINK,
+                actions = mapOf(
+                    ActionCategory.BREW to mapOf()
+                )
+            ),
         )
     }
 

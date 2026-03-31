@@ -5,9 +5,10 @@ enum class ActionCategory {
     PLACE,
     KILL,
     FISH,
+    HARVEST,
     CRAFT,
     TRADE,
-    SMELT,
+    SMELT, // TODO: add to miner?
     BREW,
     ENCHANT,
     REPAIR,
