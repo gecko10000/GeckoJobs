@@ -10,7 +10,7 @@ object Harvestable {
     const val PUMPKIN = "pumpkin"
     const val MELON = "melon"
     const val CHORUS_FRUIT = "chorus_fruit"
-    const val CHORUS_FLOWER = "chorus_flower" // TODO: only pay for direct harvest
+    const val CHORUS_FLOWER = "chorus_flower"
     const val BAMBOO = "bamboo"
     const val KELP = "kelp"
     const val COCOA = "cocoa"
@@ -19,6 +19,7 @@ object Harvestable {
     const val MOSS = "moss"
     const val NETHER_WART = "nether_wart"
     const val SEAGRASS = "seagrass"
+    const val GRASS = "grass"
     const val SEA_PICKLE = "sea_pickle"
     const val SWEET_BERRIES = "sweet_berries"
     const val VINES = "vines"

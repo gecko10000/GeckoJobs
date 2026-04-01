@@ -331,7 +331,8 @@ class JobConfigManager : MyKoinComponent {
                         Harvestable.MOSS to 1.6,
                         Harvestable.NETHER_WART to 1.2,
                         Harvestable.SEAGRASS to 0.9,
-                        Harvestable.SEA_PICKLE to 3.0,
+                        Harvestable.GRASS to 0.7,
+                        Harvestable.SEA_PICKLE to 1.0,
                         Harvestable.SWEET_BERRIES to 2.0,
                         Harvestable.VINES to 4.0,
                     )

@@ -10,6 +10,9 @@ import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Ageable
+import org.bukkit.block.data.type.CaveVinesPlant
+import org.bukkit.block.data.type.GlowLichen
+import org.bukkit.block.data.type.SeaPickle
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -20,6 +23,7 @@ import org.bukkit.event.enchantment.EnchantItemEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityTameEvent
 import org.bukkit.event.player.PlayerFishEvent
+import org.bukkit.event.player.PlayerHarvestBlockEvent
 import org.koin.core.component.inject
 import java.util.*
 
@@ -103,13 +107,26 @@ class Listeners : Listener, MyKoinComponent {
         Material.KELP_PLANT to Harvestable.KELP,
         Material.BAMBOO to Harvestable.BAMBOO,
         Material.CHORUS_PLANT to Harvestable.CHORUS_FRUIT,
+        Material.CAVE_VINES_PLANT to Harvestable.GLOW_BERRIES,
+        Material.CAVE_VINES to Harvestable.GLOW_BERRIES,
     )
 
     val savedBreakers = mutableMapOf<Block, UUID>()
 
     private val defaultFaces = setOf(BlockFace.UP)
     private val chorusFruitFaces = setOf(BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)
-    private fun getNextFaces(type: Material) = if (type == Material.CHORUS_PLANT) chorusFruitFaces else defaultFaces
+    private val glowBerryFaces = setOf(BlockFace.DOWN)
+    private fun getNextFaces(type: Material) = when (type) {
+        Material.CHORUS_PLANT -> chorusFruitFaces
+        Material.CAVE_VINES, Material.CAVE_VINES_PLANT -> glowBerryFaces
+        else -> defaultFaces
+    }
+
+    private fun shouldPayForChainBreak(block: Block): Boolean {
+        val blockData = block.blockData
+        if (blockData is CaveVinesPlant) return blockData.hasBerries()
+        return !PlayerPlacedBlockTracker.isPlayerPlaced(block)
+    }
 
     // Farmer: store breaker for the next blocks (for chain breaks)
     // Also pay if not player-placed.
@@ -121,7 +138,7 @@ class Listeners : Listener, MyKoinComponent {
             savedBreakers[block] = player.uniqueId
         }
         Task.syncDelayed({ -> for (block in nextBlocks) savedBreakers.remove(block) }, 2L)
-        if (!PlayerPlacedBlockTracker.isPlayerPlaced(block)) {
+        if (shouldPayForChainBreak(block)) {
             actionProgressManager.addProgress(player, ActionCategory.HARVEST, harvestable)
         }
     }
@@ -137,8 +154,8 @@ class Listeners : Listener, MyKoinComponent {
             savedBreakers[block] = breaker
         }
         Task.syncDelayed({ -> for (block in nextBlocks) savedBreakers.remove(block) }, 2L)
-        val player = plugin.server.getPlayer(breaker)
-        if (player != null && !PlayerPlacedBlockTracker.isPlayerPlaced(block)) {
+        val player = plugin.server.getPlayer(breaker) ?: return
+        if (shouldPayForChainBreak(block)) {
             actionProgressManager.addProgress(player, ActionCategory.HARVEST, harvestable)
         }
     }
@@ -147,6 +164,56 @@ class Listeners : Listener, MyKoinComponent {
         Material.VINE to Harvestable.VINES,
         Material.PUMPKIN to Harvestable.PUMPKIN,
         Material.MELON to Harvestable.MELON,
+        Material.CHORUS_FLOWER to Harvestable.CHORUS_FLOWER,
+        Material.MOSS_BLOCK to Harvestable.MOSS,
+        Material.MOSS_CARPET to Harvestable.MOSS,
+        Material.PALE_MOSS_BLOCK to Harvestable.MOSS,
+        Material.PALE_MOSS_CARPET to Harvestable.MOSS,
+        Material.SEAGRASS to Harvestable.SEAGRASS,
+        Material.TALL_SEAGRASS to Harvestable.SEAGRASS,
+        Material.TALL_GRASS to Harvestable.GRASS,
+        Material.TALL_DRY_GRASS to Harvestable.GRASS,
+        Material.SHORT_GRASS to Harvestable.GRASS,
+        Material.SHORT_DRY_GRASS to Harvestable.GRASS,
+        Material.SEA_PICKLE to Harvestable.SEA_PICKLE,
     )
+
+    // Farmer: standalone harvestables
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private fun BlockBreakEvent.onBreakNewHarvestable() {
+        val harvestable = newBlockHarvestables[block.type] ?: return
+        if (PlayerPlacedBlockTracker.isPlayerPlaced(block)) return
+        val blockData = block.blockData
+        val multiplier = if (blockData is SeaPickle) blockData.pickles.toDouble() else 1.0
+        actionProgressManager.addProgress(
+            player,
+            ActionCategory.HARVEST,
+            harvestable,
+            multiplier
+        )
+    }
+
+    // Farmer: right click to harvest cave vines
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    private fun PlayerHarvestBlockEvent.onHarvestCaveVines() {
+        val blockData = harvestedBlock.blockData
+        if (blockData !is CaveVinesPlant) return
+        actionProgressManager.addProgress(player, ActionCategory.HARVEST, Harvestable.GLOW_BERRIES)
+    }
+
+    // Farmer: glow lichen
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private fun BlockBreakEvent.onBreakGlowLichen() {
+        if (block.type != Material.GLOW_LICHEN) return
+        if (player.inventory.itemInMainHand.type != Material.SHEARS) return
+        if (PlayerPlacedBlockTracker.isPlayerPlaced(block)) return
+        val blockData = block.blockData as GlowLichen
+        actionProgressManager.addProgress(
+            player,
+            ActionCategory.HARVEST,
+            Harvestable.GLOW_LICHEN,
+            blockData.faces.size.toDouble()
+        )
+    }
 
 }
