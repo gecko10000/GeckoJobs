@@ -35,12 +35,13 @@ class JobProgressDisplay : MyKoinComponent {
         val nextLevelExp = jobProgressStorage.getExperienceNeededForLevel(jobProgress.level + 1)
         val progress = jobProgress.exp / nextLevelExp
         data.bossBar.progress(progress.toFloat())
+        val precision = plugin.config.bossBarPrecision
         data.bossBar.name(
             MM.deserialize(
                 plugin.config.bossBarFormat,
                 Placeholder.component("job", job.name),
-                Placeholder.unparsed("exp", String.format("%.2f", jobProgress.exp)),
-                Placeholder.unparsed("required", nextLevelExp.toLong().toString()),
+                Placeholder.unparsed("exp", String.format("%.${precision}f", jobProgress.exp)),
+                Placeholder.unparsed("required", String.format("%.${precision}f", nextLevelExp)),
                 Placeholder.unparsed("level", jobProgress.level.toString()),
             )
         )

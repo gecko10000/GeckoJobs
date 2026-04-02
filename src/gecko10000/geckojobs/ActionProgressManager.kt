@@ -30,7 +30,7 @@ class ActionProgressManager : MyKoinComponent {
     ) {
         val baseExperience = job.actions[actionCategory]?.get(identifier) ?: return
         val permissionMultiplier = 1 + getPermissionBoost(player, job)
-        val finalExperience = baseExperience * permissionMultiplier * givenMult
+        val finalExperience = baseExperience * permissionMultiplier * givenMult * job.internalMultiplier
         jobProgressStorage.addExperience(player, job, finalExperience)
     }
 

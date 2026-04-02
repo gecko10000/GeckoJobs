@@ -25,7 +25,7 @@ class JobArgumentType : CustomArgumentType.Converted<Job, String>, MyKoinCompone
             MessageComponentSerializer.message()
                 .serialize(
                     MM.deserialize(
-                        "<red>Town <name> doesn't exist!",
+                        "<red>Job <name> doesn't exist!",
                         Placeholder.unparsed("name", name.toString())
                     )
                 )

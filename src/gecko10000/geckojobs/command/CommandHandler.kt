@@ -2,6 +2,8 @@ package gecko10000.geckojobs.command
 
 import gecko10000.geckojobs.GeckoJobs
 import gecko10000.geckojobs.JobProgressStorage
+import gecko10000.geckojobs.claims.BlockClaimManager
+import gecko10000.geckojobs.claims.ClaimType
 import gecko10000.geckojobs.config.model.Job
 import gecko10000.geckojobs.di.MyKoinComponent
 import io.papermc.paper.plugin.lifecycle.event.handler.LifecycleEventHandler
@@ -10,6 +12,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.strokkur.commands.Command
 import net.strokkur.commands.Executes
 import net.strokkur.commands.Literal
+import net.strokkur.commands.paper.Executor
 import net.strokkur.commands.paper.arguments.CustomArg
 import net.strokkur.commands.permission.Permission
 import org.bukkit.command.CommandSender
@@ -22,6 +25,7 @@ class CommandHandler : MyKoinComponent {
 
     private val plugin: GeckoJobs by inject()
     private val jobProgressStorage: JobProgressStorage by inject()
+    private val blockClaimManager: BlockClaimManager by inject()
 
     fun register() {
         plugin.lifecycleManager
@@ -51,6 +55,33 @@ class CommandHandler : MyKoinComponent {
             "<green>Set <player>'s <job> $levelOrXp to $value.",
             Placeholder.component("player", target.name()),
             Placeholder.component("job", job.name),
+        )
+    }
+
+    @Executes("reset")
+    @Permission("geckojobs.command.reset")
+    fun reset(
+        sender: CommandSender,
+        @Executor player: Player,
+        @Literal("furnace", "brewing_stand") claimTypeString: String
+    ) {
+        val claimType = ClaimType.valueOf(claimTypeString.uppercase())
+        blockClaimManager.resetAllClaims(player, claimType)
+        sender.sendRichMessage("<green>Reset $claimType claims.")
+    }
+
+    @Executes("reset")
+    @Permission("geckojobs.command.reset.others")
+    fun resetOther(
+        sender: CommandSender, target: Player,
+        // KT enums don't seem to work
+        @Literal("furnace", "brewing_stand") claimTypeString: String
+    ) {
+        val claimType = ClaimType.valueOf(claimTypeString.uppercase())
+        blockClaimManager.resetAllClaims(target, claimType)
+        sender.sendRichMessage(
+            "<green>Reset $claimType claims for <player>",
+            Placeholder.component("player", target.name())
         )
     }
 

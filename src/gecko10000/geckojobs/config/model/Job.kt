@@ -14,5 +14,6 @@ data class Job(
     val name: Component,
     val description: List<Component>,
     val bossBarColor: BossBar.Color,
+    val internalMultiplier: Double = 1.0,
     val actions: Map<ActionCategory, Map<String, Double>>,
 )

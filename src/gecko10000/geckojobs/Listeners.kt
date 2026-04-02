@@ -1,6 +1,8 @@
 package gecko10000.geckojobs
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent
+import gecko10000.geckojobs.claims.BlockClaimManager
+import gecko10000.geckojobs.claims.ClaimType
 import gecko10000.geckojobs.config.model.ActionCategory
 import gecko10000.geckojobs.config.model.Harvestable
 import gecko10000.geckojobs.di.MyKoinComponent
@@ -22,6 +24,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.enchantment.EnchantItemEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityTameEvent
+import org.bukkit.event.inventory.BrewEvent
 import org.bukkit.event.player.PlayerFishEvent
 import org.bukkit.event.player.PlayerHarvestBlockEvent
 import org.koin.core.component.inject
@@ -31,6 +34,7 @@ class Listeners : Listener, MyKoinComponent {
 
     private val plugin: GeckoJobs by inject()
     private val actionProgressManager: ActionProgressManager by inject()
+    private val blockClaimManager: BlockClaimManager by inject()
 
     init {
         plugin.server.pluginManager.registerEvents(this, plugin)
@@ -214,6 +218,13 @@ class Listeners : Listener, MyKoinComponent {
             Harvestable.GLOW_LICHEN,
             blockData.faces.size.toDouble()
         )
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    private fun BrewEvent.onBrew() {
+        val owner = blockClaimManager.getClaimOwner(block, ClaimType.BREWING_STAND) ?: return
+        val ingredient = contents.ingredient?.type?.name?.lowercase() ?: return
+        actionProgressManager.addProgress(owner, ActionCategory.BREW, ingredient)
     }
 
 }

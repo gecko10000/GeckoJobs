@@ -36,7 +36,7 @@ class JobProgressStorage : MyKoinComponent {
 
         // level up
         var expForNextLevel = getExperienceNeededForLevel(progress.level + 1)
-        while (progress.exp > expForNextLevel) {
+        while (progress.exp >= expForNextLevel) {
             progress = progress.copy(level = progress.level + 1, exp = progress.exp - expForNextLevel)
             expForNextLevel = getExperienceNeededForLevel(progress.level + 1)
         }

@@ -373,7 +373,23 @@ class JobConfigManager : MyKoinComponent {
                 ),
                 bossBarColor = BossBar.Color.YELLOW,
                 actions = mapOf(
-                    ActionCategory.MINE to mapOf()
+                    ActionCategory.MINE to mapOf(
+                        "red_sand" to 0.4,
+                        "sand" to 0.4,
+                        "podzol" to 0.4,
+                        "mycelium" to 0.4,
+                        "mud" to 0.4,
+                        "dirt" to 0.3,
+                        "grass_block" to 0.3,
+                        "gravel" to 0.3,
+                        "clay" to 0.5,
+                        "coarse_dirt" to 0.5,
+                        "rooted_dirt" to 0.5,
+                        "soul_sand" to 0.4,
+                        "soul_soil" to 0.4,
+                        "snow_block" to 0.4,
+                        "snow" to 0.02,
+                    )
                 )
             ),
             Job(
@@ -385,7 +401,25 @@ class JobConfigManager : MyKoinComponent {
                 ),
                 bossBarColor = BossBar.Color.PINK,
                 actions = mapOf(
-                    ActionCategory.BREW to mapOf()
+                    ActionCategory.BREW to mapOf(
+                        "nether_wart" to 3.0,
+                        "glistering_melon" to 5.0,
+                        "magma_cream" to 3.0,
+                        "ghast_tear" to 6.0,
+                        "blaze_powder" to 3.0,
+                        "gunpowder" to 3.0,
+                        "sugar" to 3.0,
+                        "rabbit_foot" to 6.0,
+                        "fermented_spider_eye" to 3.0,
+                        "redstone" to 3.0,
+                        "glowstone_dust" to 3.0,
+                        "spider_eye" to 3.0,
+                        "pufferfish" to 3.0,
+                        "golden_carrot" to 6.0,
+                        "turtle_helmet" to 12.0,
+                        "phantom_membrane" to 7.0,
+                        "dragon_breath" to 3.0,
+                    )
                 )
             ),
         )
