@@ -349,6 +349,19 @@ class JobConfigManager : MyKoinComponent {
                 actions = mapOf(
                     ActionCategory.MINE to mapOf(
                         "oak_log" to 0.5,
+                        "spruce_log" to 0.5,
+                        "birch_log" to 0.5,
+                        "jungle_log" to 0.5,
+                        "acacia_log" to 0.5,
+                        "dark_oak_log" to 0.5,
+                        "mangrove_log" to 0.5,
+                        "cherry_log" to 0.5,
+                        "pale_oak_log" to 0.5,
+                        "crimson_stem" to 0.5,
+                        "warped_stem" to 0.5,
+                        "mushroom_stem" to 0.4,
+                        "red_mushroom_block" to 0.2,
+                        "brown_mushroom_block" to 0.2,
                     )
                 )
             ),
