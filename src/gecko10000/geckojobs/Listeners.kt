@@ -25,6 +25,7 @@ import org.bukkit.event.enchantment.EnchantItemEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityTameEvent
 import org.bukkit.event.inventory.BrewEvent
+import org.bukkit.event.inventory.FurnaceSmeltEvent
 import org.bukkit.event.player.PlayerFishEvent
 import org.bukkit.event.player.PlayerHarvestBlockEvent
 import org.koin.core.component.inject
@@ -225,6 +226,13 @@ class Listeners : Listener, MyKoinComponent {
         val owner = blockClaimManager.getClaimOwner(block, ClaimType.BREWING_STAND) ?: return
         val ingredient = contents.ingredient?.type?.name?.lowercase() ?: return
         actionProgressManager.addProgress(owner, ActionCategory.BREW, ingredient)
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    private fun FurnaceSmeltEvent.onSmelt() {
+        val owner = blockClaimManager.getClaimOwner(block, ClaimType.FURNACE) ?: return
+        val output = this.result.type.name.lowercase()
+        actionProgressManager.addProgress(owner, ActionCategory.SMELT, output)
     }
 
 }

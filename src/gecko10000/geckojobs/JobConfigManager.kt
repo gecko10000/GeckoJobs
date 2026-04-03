@@ -422,6 +422,76 @@ class JobConfigManager : MyKoinComponent {
                     )
                 )
             ),
+            Job(
+                id = "smelter",
+                name = parseMM("<#ff681f><b>Smelter"),
+                description = listOf(
+                    parseMM("<yellow>\"Bro is cooked fr\""),
+                ),
+                bossBarColor = BossBar.Color.RED,
+                actions = mapOf(
+                    ActionCategory.SMELT to mapOf(
+                        "baked_potato" to 0.3,
+                        "dried_kelp" to 0.1,
+                        "cooked_beef" to 0.4,
+                        "cooked_porkchop" to 0.4,
+                        "cooked_mutton" to 0.3,
+                        "cooked_chicken" to 0.3,
+                        "cooked_rabbit" to 0.3,
+                        "cooked_cod" to 0.3,
+                        "cooked_salmon" to 0.3,
+
+                        "iron_ingot" to 0.5,
+                        "copper_ingot" to 0.4,
+                        "gold_ingot" to 0.8,
+                        "netherite_scrap" to 2.0,
+
+                        "iron_nugget" to 0.3,
+                        "gold_nugget" to 0.3,
+                        "copper_nugget" to 0.3,
+
+                        "stone" to 0.1,
+                        "smooth_stone" to 0.12,
+                        "cracked_stone_bricks" to 0.15,
+                        "deepslate" to 0.25,
+                        "cracked_deepslate_bricks" to 0.3,
+                        "cracked_deepslate_tiles" to 0.3,
+                        "smooth_sandstone" to 0.3,
+                        "smooth_red_sandstone" to 0.3,
+                        "cracked_nether_bricks" to 0.3,
+                        "smooth_basalt" to 0.3,
+                        "cracked_polished_blackstone_bricks" to 0.3,
+                        "smooth_quartz" to 0.4,
+                        "terracotta" to 0.4,
+                        "red_glazed_terracotta" to 0.4,
+                        "orange_glazed_terracotta" to 0.4,
+                        "yellow_glazed_terracotta" to 0.4,
+                        "lime_glazed_terracotta" to 0.4,
+                        "green_glazed_terracotta" to 0.4,
+                        "cyan_glazed_terracotta" to 0.4,
+                        "light_blue_glazed_terracotta" to 0.4,
+                        "blue_glazed_terracotta" to 0.4,
+                        "purple_glazed_terracotta" to 0.4,
+                        "magenta_glazed_terracotta" to 0.4,
+                        "pink_glazed_terracotta" to 0.4,
+                        "white_glazed_terracotta" to 0.4,
+                        "light_gray_glazed_terracotta" to 0.4,
+                        "gray_glazed_terracotta" to 0.4,
+                        "black_glazed_terracotta" to 0.4,
+                        "brown_glazed_terracotta" to 0.4,
+                        "glass" to 0.2,
+                        "sponge" to 0.5,
+                        "charcoal" to 0.1,
+                        "popped_chorus_fruit" to 0.5,
+                        "lime_dye" to 0.5,
+                        "green_dye" to 0.05,
+                        "brick" to 0.2,
+                        "nether_brick" to 0.1,
+                        "resin_brick" to 0.1,
+                        "leaf_litter" to 0.1,
+                    )
+                )
+            ),
         )
     }
 
